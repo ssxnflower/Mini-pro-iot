@@ -28,7 +28,7 @@
     <script>
         async function fetchData() {
             try {
-                const response = await fetch("http://localhost/sensor/get_data.php");
+                const response = await fetch("http://localhost/sensor/save_data.php");
                 const data = await response.json();
                 if (data.length > 0) {
                     document.getElementById("temperature").innerText = data[0].temperature;
