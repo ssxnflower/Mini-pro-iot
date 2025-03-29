@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ข้อมูลแผ่นดินไหวทั้งหมด</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🌍 ข้อมูลแผ่นดินไหวทั้งหมด</h1>
+        <button onclick="location.href='index.html'">กลับไปหน้าหลัก</button>
+        <h2>ตารางแผ่นดินไหว</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ขนาด (ริกเตอร์)</th>
+                    <th>accX</th>
+                    <th>accY</th>
+                    <th>accZ</th>
+                    <th>เวลา</th>
+                </tr>
+            </thead>
+            <tbody id="earthquake-table-body">
+                <!-- ข้อมูลจะถูกโหลดตรงนี้ -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        async function loadEarthquakeData() {
+            try {
+                const response = await fetch("http://localhost/sensor/get_data.php");
+                const data = await response.json();
+                const tableBody = document.getElementById("earthquake-table-body");
+                tableBody.innerHTML = "";
+
+                data.forEach(row => {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td>${row.magnitude}</td>
+                        <td>${row.accX}</td>
+                        <td>${row.accY}</td>
+                        <td>${row.accZ}</td>
+                        <td>${row.timestamp}</td>
+                    `;
+                    tableBody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error("Error loading earthquake data:", error);
+            }
+        }
+
+        // โหลดข้อมูลทุก 5 วินาที
+        setInterval(loadEarthquakeData, 5000);
+        loadEarthquakeData();
+    </script>
+</body>
+</html>

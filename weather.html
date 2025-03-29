@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ข้อมูลอุณหภูมิและความชื้นทั้งหมด</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🌡️ ข้อมูลอุณหภูมิและความชื้นทั้งหมด</h1>
+
+        <button onclick="location.href='index.html'">กลับไปหน้าหลัก</button>
+
+        <h2>ตารางอุณหภูมิและความชื้น</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>อุณหภูมิ (°C)</th>
+                    <th>ความชื้น (%)</th>
+                    <th>เวลา</th>
+                </tr>
+            </thead>
+            <tbody id="weather-table-body">
+                <!-- ข้อมูลจะถูกแทรกที่นี่ -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        async function loadWeatherData() {
+            try {
+                const response = await fetch("http://localhost/sensor/get_data.php");
+                const data = await response.json();
+                const tableBody = document.getElementById("weather-table-body");
+                tableBody.innerHTML = "";
+
+                data.forEach(row => {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td>${row.temperature} °C</td>
+                        <td>${row.humidity} %</td>
+                        <td>${row.timestamp}</td>
+                    `;
+                    tableBody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error("Error loading weather data:", error);
+            }
+        }
+        src="script.js"
+        loadWeatherData();
+    </script>
+</body>
+</html>

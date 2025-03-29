@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>Weather & Earthquake Info</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🌎 สภาพอากาศ & แผ่นดินไหว</h1>
+        <div class="card">
+            <h2 id="datetime">⏳ กำลังโหลด...</h2>
+        </div>
+        <div class="card">
+            <h3>🌡️ อุณหภูมิ: <span id="temperature">--</span> °C</h3>
+            <h3>💧 ความชื้น: <span id="humidity">--</span> %</h3>
+            <button onclick="location.href='weather.html'">ดูข้อมูลสภาพอากาศ</button>
+        </div>
+        <div class="card">
+            <h3>🌍 ข้อมูลแผ่นดินไหว</h3>
+            <p>📏 ขนาดล่าสุด: <span id="magnitude">--</span> ริกเตอร์</p>
+            <button onclick="location.href='earthquake.html'">ดูข้อมูลแผ่นดินไหวทั้งหมด</button>
+        </div>
+    </div>
+
+    <script>
+        async function fetchData() {
+            try {
+                const response = await fetch("http://192.168.177.179/sensor/get_data.php");
+                const data = await response.json();
+                if (data.length > 0) {
+                    document.getElementById("temperature").innerText = data[0].temperature;
+                    document.getElementById("humidity").innerText = data[0].humidity;
+                    document.getElementById("magnitude").innerText = data[0].magnitude;
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+    
+    // โหลดข้อมูลทุก 5 วินาที
+        setInterval(fetchData, 5000);
+        fetchData();
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
